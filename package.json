@@ -2,7 +2,7 @@
   "private": true,
   "name": "whatabout",
   "description": "What about doing something else? This extension will help you to focus on your work by blocking websites for a certain amount of time, and reminding you to do actual work.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "type": "module",
   "author": {
@@ -25,11 +25,6 @@
   "scripts": {
     "dev": "extension dev",
     "start": "extension start",
-    "build": "extension build",
-    "sync-version": "node scripts/sync-version.js",
-    "version": "npm run sync-version && git add manifest.json",
-    "release:patch": "npm version patch",
-    "release:minor": "npm version minor",
-    "release:major": "npm version major"
+    "build": "extension build"
   }
 }
