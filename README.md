@@ -10,6 +10,11 @@ What About intercepts your visits to blocked websites and presents you with a fu
 2. Hover over a "Continue" button for several seconds to proceed
 3. Or choose to close the site and get back to work
 
+<details>
+  <summary>Preview</summary>
+   <img width="1252" height="686" alt="Screenshot 2025-10-27 at 1 47 15 AM" src="https://github.com/user-attachments/assets/48d4bc97-cebf-49c4-b9ee-64ee7adbe821" />
+</details>
+
 ## Features
 
 - **Smart Blocking**: Add any website to your blocklist (e.g., `instagram.com`, `twitter.com`, `reddit.com`)
@@ -19,6 +24,11 @@ What About intercepts your visits to blocked websites and presents you with a fu
 - **Quick Exit**: Option to close the distracting site immediately
 - **Auto-save Settings**: Changes sync automatically across your browser
 - **Cross-browser Support**: Works on Chrome, Firefox, and Edge
+
+### Future Features
+- Show this every X minutes, to break the chain of scrolling
+- Make use of the UI more better way, can have some more productive things there (quote?, yearmap?, goals?, maybe your ex's photo?)
+- Ability to check the tasks in the UI (this is going more towards the todo list end of the spectrum)
 
 ## Installation
 
