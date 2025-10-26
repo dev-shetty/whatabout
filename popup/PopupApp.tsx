@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react"
+import { InputWithButton } from "./ui/InputWithButton"
+import { ItemList } from "./ui/ItemList"
+import { SectionCard } from "./ui/SectionCard"
 
 interface Settings {
   blockedSites: string[]
@@ -101,118 +104,92 @@ export default function PopupApp() {
   }
 
   if (isLoading) {
-    return <div className="p-3">Loading...</div>
+    return (
+      <div className="p-4 flex items-center justify-center">
+        <div className="text-sm text-gray-600">Loading settings...</div>
+      </div>
+    )
   }
 
   return (
-    <div className="p-3">
-      <h1 className="text-xl font-bold mb-3">What About Settings</h1>
+    <div className="p-4 bg-gray-50 min-h-screen">
+      <div className="mb-4">
+        <h1 className="text-xl font-bold text-gray-900">What About</h1>
+        <p className="text-xs text-gray-600 mt-0.5">
+          Block distracting sites and stay focused
+        </p>
+      </div>
 
-      <section className="grid gap-8">
-        <div>
-          <label className="block text-xs font-semibold mb-1">
-            Wait Time (seconds)
+      <section className="grid gap-3">
+        <SectionCard>
+          <div className="flex items-center justify-between mb-1">
+            <label className="text-sm font-semibold text-gray-900">Tasks</label>
+            <span className="text-xs text-gray-500 font-medium">
+              {settings.tasks.length}
+            </span>
+          </div>
+          <p className="text-xs text-gray-600 mb-2">
+            Things you should focus on instead
+          </p>
+          <InputWithButton
+            value={newTask}
+            onChange={setNewTask}
+            onSubmit={addTask}
+            placeholder="Add a task"
+          />
+          <ItemList
+            items={settings.tasks}
+            onRemove={removeTask}
+            emptyMessage="No tasks added yet"
+          />
+        </SectionCard>
+
+        <SectionCard>
+          <div className="flex items-center justify-between mb-1">
+            <label className="text-sm font-semibold text-gray-900">
+              Blocked Sites
+            </label>
+            <span className="text-xs text-gray-500 font-medium">
+              {settings.blockedSites.length}
+            </span>
+          </div>
+          <p className="text-xs text-gray-600 mb-2">
+            Sites that require reflection before access
+          </p>
+          <InputWithButton
+            value={newSite}
+            onChange={setNewSite}
+            onSubmit={addSite}
+            placeholder="example.com"
+          />
+          <ItemList
+            items={settings.blockedSites}
+            onRemove={removeSite}
+            emptyMessage="No sites blocked. Try instagram.com or twitter.com"
+          />
+        </SectionCard>
+
+        <SectionCard>
+          <label className="block text-sm font-semibold text-gray-900 mb-1">
+            Wait Time
           </label>
+          <p className="text-xs text-gray-600 mb-2">
+            Seconds to wait before accessing blocked sites
+          </p>
           <input
             type="number"
             min="1"
             max="60"
             value={settings.waitTime}
             onChange={(e) => updateWaitTime(parseInt(e.target.value))}
-            className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold mb-1">Tasks</label>
-          <div className="flex gap-1 mb-2">
-            <input
-              type="text"
-              value={newTask}
-              onChange={(e) => setNewTask(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && addTask()}
-              placeholder="Add a task"
-              className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
-            <button
-              onClick={addTask}
-              className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors cursor-pointer"
-            >
-              +
-            </button>
-          </div>
-
-          <div className="space-y-1 max-h-32 overflow-y-auto">
-            {settings.tasks.length === 0 ? (
-              <p className="text-xs text-gray-500 italic">No tasks</p>
-            ) : (
-              settings.tasks.map((task, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center justify-between p-1.5 bg-gray-50 rounded text-xs"
-                >
-                  <span className="flex-1 truncate">{task}</span>
-                  <button
-                    onClick={() => removeTask(task)}
-                    className="px-2 py-0.5 text-xs text-red-600 hover:bg-red-50 rounded transition-colors cursor-pointer"
-                  >
-                    x
-                  </button>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold mb-1">
-            Blocked Sites
-          </label>
-          <div className="flex gap-1 mb-2">
-            <input
-              type="text"
-              value={newSite}
-              onChange={(e) => setNewSite(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && addSite()}
-              placeholder="example.com"
-              className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
-            <button
-              onClick={addSite}
-              className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors cursor-pointer"
-            >
-              +
-            </button>
-          </div>
-
-          <div className="max-h-32 overflow-y-auto">
-            {settings.blockedSites.length === 0 ? (
-              <p className="text-xs text-gray-500 italic">
-                No sites blocked, start with instagram.com xD
-              </p>
-            ) : (
-              settings.blockedSites.map((site) => (
-                <div
-                  key={site}
-                  className="flex items-center justify-between p-1.5 bg-gray-50 rounded text-xs"
-                >
-                  <span className="flex-1 truncate">{site}</span>
-                  <button
-                    onClick={() => removeSite(site)}
-                    className="px-2 py-0.5 text-xs text-red-600 hover:bg-red-50 rounded transition-colors cursor-pointer"
-                  >
-                    x
-                  </button>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
+        </SectionCard>
       </section>
 
-      <div className="pt-2 border-t border-gray-200">
-        <p className="text-xs text-gray-500">
-          Changes apply immediately. Reload blocked pages.
+      <div className="mt-4 pt-3 border-t border-gray-200">
+        <p className="text-xs text-gray-600 text-center">
+          Changes save automatically • Reload pages to apply
         </p>
       </div>
     </div>
