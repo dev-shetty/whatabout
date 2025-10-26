@@ -1,12 +1,17 @@
 import { useCallback, useMemo, useRef, useState } from "react"
 
 const MS_TO_SECONDS = 1000
-const TIME_TO_DISPLAY = 3 // in seconds
 
-export default function ContentApp() {
+interface ContentAppProps {
+  waitTime: number
+  tasks: string[]
+}
+
+export default function ContentApp({ waitTime, tasks }: ContentAppProps) {
   const [isVisible, setIsVisible] = useState(true)
   const [time, setTime] = useState(0)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const TIME_TO_DISPLAY = waitTime
 
   const handleCloseSite = () => {
     const api = (globalThis as any).browser || chrome
@@ -49,11 +54,9 @@ export default function ContentApp() {
 
         <div className="rounded-lg p-6 mb-8">
           <ul className="text-white text-left space-y-3 text-lg">
-            <li>• Finish the project proposal</li>
-            <li>• Review pull requests</li>
-            <li>• Call mom</li>
-            <li>• Exercise for 30 minutes</li>
-            <li>• Read for 20 minutes</li>
+            {tasks.map((task, idx) => (
+              <li key={idx}>• {task}</li>
+            ))}
           </ul>
         </div>
 

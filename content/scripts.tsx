@@ -17,48 +17,72 @@ if (document.readyState === "complete") {
 }
 
 function initial() {
-  // In content/scripts.tsx
-  const ALLOWED_SITES = ["example.com", "github.com", "stackoverflow.com"]
+  const api = (globalThis as any).browser || chrome
 
-  if (!ALLOWED_SITES.some((site) => window.location.hostname.includes(site))) {
-    // Exit early if not an allowed site
-    return () => {}
-  }
+  // Load settings from storage and check if site should be blocked
+  api.storage.sync.get(
+    ["blockedSites", "waitTime", "tasks"],
+    (result: {
+      blockedSites?: string[]
+      waitTime?: number
+      tasks?: string[]
+    }) => {
+      const blockedSites = result.blockedSites || [
+        "example.com",
+        "github.com",
+        "stackoverflow.com",
+      ]
+      const waitTime = result.waitTime || 3
+      const tasks = result.tasks || [
+        "Finish the project proposal",
+        "Review pull requests",
+        "Call mom",
+        "Exercise for 30 minutes",
+        "Read for 20 minutes",
+      ]
 
-  // Create a new div element and append it to the document's body
-  const rootDiv = document.createElement("div")
-  rootDiv.id = "extension-root"
-  document.body.appendChild(rootDiv)
+      const isBlocked = blockedSites.some((site) =>
+        window.location.hostname.includes(site)
+      )
 
-  // Injecting content_scripts inside a shadow dom
-  // prevents conflicts with the host page's styles.
-  // This way, styles from the extension won't leak into the host page.
-  const shadowRoot = rootDiv.attachShadow({ mode: "open" })
+      if (!isBlocked) {
+        return
+      }
 
-  const styleElement = document.createElement("style")
-  shadowRoot.appendChild(styleElement)
-  fetchCSS().then((response) => (styleElement.textContent = response))
+      // Create a new div element and append it to the document's body
+      const rootDiv = document.createElement("div")
+      rootDiv.id = "extension-root"
+      document.body.appendChild(rootDiv)
 
-  if (import.meta.webpackHot) {
-    import.meta.webpackHot?.accept("./styles.css", () => {
+      // Injecting content_scripts inside a shadow dom
+      // prevents conflicts with the host page's styles.
+      // This way, styles from the extension won't leak into the host page.
+      const shadowRoot = rootDiv.attachShadow({ mode: "open" })
+
+      const styleElement = document.createElement("style")
+      shadowRoot.appendChild(styleElement)
       fetchCSS().then((response) => (styleElement.textContent = response))
-    })
-  }
 
-  // Create a container for React to render into
-  const container = document.createElement("div")
-  shadowRoot.appendChild(container)
+      if (import.meta.webpackHot) {
+        import.meta.webpackHot?.accept("./styles.css", () => {
+          fetchCSS().then((response) => (styleElement.textContent = response))
+        })
+      }
 
-  const mountingPoint = ReactDOM.createRoot(container)
-  mountingPoint.render(
-    <div className="content_script">
-      <App />
-    </div>
+      // Create a container for React to render into
+      const container = document.createElement("div")
+      shadowRoot.appendChild(container)
+
+      const mountingPoint = ReactDOM.createRoot(container)
+      mountingPoint.render(
+        <div className="content_script">
+          <App waitTime={waitTime} tasks={tasks} />
+        </div>
+      )
+    }
   )
-  return () => {
-    mountingPoint.unmount()
-    rootDiv.remove()
-  }
+
+  return () => {}
 }
 
 async function fetchCSS() {

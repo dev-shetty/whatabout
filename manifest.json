@@ -3,25 +3,26 @@
   "manifest_version": 3,
   "version": "0.0.1",
   "name": "whatabout",
-  "description": "A modern browser extension content script example built with Extension.js and React. Demonstrates how to create interactive content scripts using React components with clean, maintainable code.",
+  "description": "What about doing something else? This extension will help you to focus on your work by blocking websites for a certain amount of time, and reminding you to do actual work.",
   "icons": {
     "48": "images/extension_48.png"
   },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "images/extension_48.png"
+    }
+  },
+  "permissions": ["storage"],
   "background": {
     "chromium:service_worker": "background.ts",
-    "firefox:scripts": [
-      "background.ts"
-    ]
+    "firefox:scripts": ["background.ts"]
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "./content/scripts.tsx"
-      ]
+      "matches": ["<all_urls>"],
+      "js": ["./content/scripts.tsx"]
     }
   ],
-  "author": "Your Name"
+  "author": "Deveesh Shetty"
 }
