@@ -1,16 +1,19 @@
 {
   "$schema": "https://json.schemastore.org/chrome-manifest.json",
   "manifest_version": 3,
-  "version": "0.0.1",
+  "version": "1.0.0",
   "name": "whatabout",
   "description": "What about doing something else? This extension will help you to focus on your work by blocking websites for a certain amount of time, and reminding you to do actual work.",
   "icons": {
-    "48": "images/extension_48.png"
+    "16": "images/icon16.png",
+    "32": "images/icon32.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
   },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "48": "images/extension_48.png"
+      "48": "images/icon48.png"
     }
   },
   "permissions": ["storage"],
@@ -21,7 +24,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["./content/scripts.tsx"]
+      "js": ["./src/content/scripts.tsx"]
     }
   ],
   "author": "Deveesh Shetty"

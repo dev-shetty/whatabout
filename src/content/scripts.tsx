@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom/client"
 import App from "./App"
+import { DEFAULT_SETTINGS } from "@constants"
 
 let unmount: () => void
 
@@ -27,19 +28,9 @@ function initial() {
       waitTime?: number
       tasks?: string[]
     }) => {
-      const blockedSites = result.blockedSites || [
-        "example.com",
-        "github.com",
-        "stackoverflow.com",
-      ]
+      const blockedSites = result.blockedSites || []
       const waitTime = result.waitTime || 3
-      const tasks = result.tasks || [
-        "Finish the project proposal",
-        "Review pull requests",
-        "Call mom",
-        "Exercise for 30 minutes",
-        "Read for 20 minutes",
-      ]
+      const tasks = result.tasks || DEFAULT_SETTINGS.tasks
 
       const isBlocked = blockedSites.some((site) =>
         window.location.hostname.includes(site)

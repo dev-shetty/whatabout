@@ -2,24 +2,8 @@ import { useEffect, useState } from "react"
 import { InputWithButton } from "./ui/InputWithButton"
 import { ItemList } from "./ui/ItemList"
 import { SectionCard } from "./ui/SectionCard"
-
-interface Settings {
-  blockedSites: string[]
-  waitTime: number
-  tasks: string[]
-}
-
-const DEFAULT_SETTINGS: Settings = {
-  blockedSites: [],
-  waitTime: 3,
-  tasks: [
-    "Finish the project proposal",
-    "Review pull requests",
-    "Call mom",
-    "Exercise for 30 minutes",
-    "Read for 20 minutes",
-  ],
-}
+import type { Settings } from "@types"
+import { DEFAULT_SETTINGS } from "@constants"
 
 export default function PopupApp() {
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS)
@@ -140,7 +124,7 @@ export default function PopupApp() {
           <ItemList
             items={settings.tasks}
             onRemove={removeTask}
-            emptyMessage="No tasks added yet"
+            emptyMessage="No tasks added yet, do something anon"
           />
         </SectionCard>
 
@@ -165,7 +149,7 @@ export default function PopupApp() {
           <ItemList
             items={settings.blockedSites}
             onRemove={removeSite}
-            emptyMessage="No sites blocked. Try instagram.com or twitter.com"
+            emptyMessage="No sites blocked. Try instagram.com"
           />
         </SectionCard>
 
