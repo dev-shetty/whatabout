@@ -47,10 +47,10 @@ export default function ContentApp({ waitTime, tasks }: ContentAppProps) {
   return (
     <div className="fixed inset-0 bg-gray-900 flex items-center justify-center z-999999">
       <div className="max-w-3xl p-8 bg-gray-700 rounded-xl">
-        <h1 className="text-5xl font-bold text-white mb-8">What about?</h1>
+        <h1 className="text-3xl font-bold text-white mb-8">What about?</h1>
 
         <div className="rounded-lg mb-8">
-          <ul className="text-white text-left space-y-3 text-2xl">
+          <ul className="text-white text-left space-y-3 text-xl">
             {tasks.map((task, idx) => (
               <li key={idx}>• {task}</li>
             ))}
@@ -62,7 +62,7 @@ export default function ContentApp({ waitTime, tasks }: ContentAppProps) {
             onClick={handleContinue}
             onMouseEnter={startTimer}
             onMouseLeave={stopTimer}
-            className="px-8 py-3 bg-gray-900 text-white font-semibold rounded-lg transition-color cursor-pointer"
+            className="px-8 py-3 bg-gray-900 text-white font-semibold rounded-lg transition-color cursor-pointer w-48"
             style={{
               cursor: timeLeft > TIMER_START ? "not-allowed" : "pointer",
             }}
@@ -71,7 +71,7 @@ export default function ContentApp({ waitTime, tasks }: ContentAppProps) {
           </button>
           <button
             onClick={handleCloseSite}
-            className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
+            className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors w-48"
           >
             Close site
           </button>
