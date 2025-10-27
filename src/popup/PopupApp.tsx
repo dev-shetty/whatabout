@@ -13,27 +13,37 @@ export default function PopupApp() {
 
   const api = (globalThis as any).browser || chrome
 
+  // Use local storage for Firefox, sync for Chrome
+  const storage = api.storage.local
+
   useEffect(() => {
     // Load settings from storage
-    api.storage.sync.get(
-      ["blockedSites", "waitTime", "tasks"],
-      (result: any) => {
+    storage
+      .get(["blockedSites", "waitTime", "tasks"])
+      .then((result: any) => {
         setSettings({
           blockedSites: result.blockedSites || DEFAULT_SETTINGS.blockedSites,
           waitTime: result.waitTime || DEFAULT_SETTINGS.waitTime,
           tasks: result.tasks || DEFAULT_SETTINGS.tasks,
         })
         setIsLoading(false)
-      }
-    )
+      })
+      .catch((error: any) => {
+        console.error("Failed to load settings:", error)
+        setIsLoading(false)
+      })
   }, [])
 
-  const saveSettings = (newSettings: Settings) => {
+  const saveSettings = async (newSettings: Settings) => {
     setSettings(newSettings)
-    api.storage.sync.set(newSettings)
+    try {
+      await storage.set(newSettings)
+    } catch (error) {
+      console.error("Failed to save settings:", error)
+    }
   }
 
-  const addSite = () => {
+  const addSite = async () => {
     if (!newSite.trim()) return
 
     const site = newSite.trim().toLowerCase()
@@ -42,29 +52,29 @@ export default function PopupApp() {
       return
     }
 
-    saveSettings({
+    await saveSettings({
       ...settings,
       blockedSites: [...settings.blockedSites, site],
     })
     setNewSite("")
   }
 
-  const removeSite = (site: string) => {
-    saveSettings({
+  const removeSite = async (site: string) => {
+    await saveSettings({
       ...settings,
       blockedSites: settings.blockedSites.filter((s) => s !== site),
     })
   }
 
-  const updateWaitTime = (time: number) => {
+  const updateWaitTime = async (time: number) => {
     if (time < 1) return
-    saveSettings({
+    await saveSettings({
       ...settings,
       waitTime: time,
     })
   }
 
-  const addTask = () => {
+  const addTask = async () => {
     if (!newTask.trim()) return
 
     const task = newTask.trim()
@@ -73,15 +83,15 @@ export default function PopupApp() {
       return
     }
 
-    saveSettings({
+    await saveSettings({
       ...settings,
       tasks: [...settings.tasks, task],
     })
     setNewTask("")
   }
 
-  const removeTask = (task: string) => {
-    saveSettings({
+  const removeTask = async (task: string) => {
+    await saveSettings({
       ...settings,
       tasks: settings.tasks.filter((t) => t !== task),
     })
