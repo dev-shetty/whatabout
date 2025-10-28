@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+/* Setting it as pixels to avoid site styles from leaking into the extension since tailwind by default uses rems */
+@theme {
+  --spacing: 4px;
+  --radius-lg: 8px;
+  --container-3xl: 768px;
+  --text-3xl: 28px;
+  --text-xl: 20px;
+  --text-md: 16px;
+}
