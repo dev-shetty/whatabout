@@ -1,7 +1,7 @@
 import type { Settings } from "@types"
 
 export const DEFAULT_SETTINGS: Settings = {
-  blockedSites: ["instagram.com"],
+  blockedSites: [],
   waitTime: 3,
   tasks: [
     "Continue reading the book",
