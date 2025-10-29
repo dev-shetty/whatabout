@@ -2,7 +2,7 @@
   "private": true,
   "name": "whatabout",
   "description": "What about doing something else? This extension will help you to focus on your work by blocking websites for a certain amount of time, and reminding you to do actual work.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "type": "module",
   "author": {
@@ -25,6 +25,9 @@
   "scripts": {
     "dev": "extension dev",
     "start": "extension start",
-    "build": "extension build"
+    "build": "extension build",
+    "release:patch": "./bump-version.sh patch",
+    "release:minor": "./bump-version.sh minor",
+    "release:major": "./bump-version.sh major"
   }
 }

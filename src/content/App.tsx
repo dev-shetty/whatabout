@@ -1,5 +1,5 @@
 import { SECONDS_IN_MS, TIMER_START } from "@constants"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 interface ContentAppProps {
   waitTime: number
@@ -20,12 +20,8 @@ export default function ContentApp({ waitTime, tasks }: ContentAppProps) {
   const handleContinue = () => {
     if (time < TIME_TO_DISPLAY && intervalRef.current) return
     setIsVisible(false)
-    api.runtime.sendMessage({ action: "startTimer" }, (response: any) => {
-      stopTimer()
-      if (response.type === "blockSite" && response.payload) {
-        setIsVisible(true)
-      }
-    })
+    stopTimer()
+    api.runtime.sendMessage({ action: "startTimer" })
   }
 
   const startTimer = () => {
@@ -41,6 +37,19 @@ export default function ContentApp({ waitTime, tasks }: ContentAppProps) {
       setTime(TIMER_START)
     }
   }
+
+  useEffect(() => {
+    const messageListener = (message: any) => {
+      if (message.type === "blockSite" && message.payload) {
+        setIsVisible(true)
+      }
+    }
+    api.runtime.onMessage.addListener(messageListener)
+
+    return () => {
+      api.runtime.onMessage.removeListener(messageListener)
+    }
+  }, [])
 
   const timeLeft = time < TIME_TO_DISPLAY ? TIME_TO_DISPLAY - time : TIMER_START
 
