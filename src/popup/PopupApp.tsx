@@ -19,12 +19,14 @@ export default function PopupApp() {
   useEffect(() => {
     // Load settings from storage
     storage
-      .get(["blockedSites", "waitTime", "tasks"])
+      .get(["blockedSites", "waitTime", "tasks", "reminderInterval"])
       .then((result: any) => {
         setSettings({
           blockedSites: result.blockedSites || DEFAULT_SETTINGS.blockedSites,
           waitTime: result.waitTime || DEFAULT_SETTINGS.waitTime,
           tasks: result.tasks || DEFAULT_SETTINGS.tasks,
+          reminderInterval:
+            result.reminderInterval || DEFAULT_SETTINGS.reminderInterval,
         })
         setIsLoading(false)
       })
@@ -71,6 +73,14 @@ export default function PopupApp() {
     await saveSettings({
       ...settings,
       waitTime: time,
+    })
+  }
+
+  const updateReminderInterval = async (interval: number) => {
+    if (interval < 0) return
+    await saveSettings({
+      ...settings,
+      reminderInterval: interval,
     })
   }
 
@@ -176,6 +186,24 @@ export default function PopupApp() {
             max="60"
             value={settings.waitTime}
             onChange={(e) => updateWaitTime(parseInt(e.target.value))}
+            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </SectionCard>
+
+        <SectionCard>
+          <label className="block text-sm font-semibold text-gray-900 mb-1">
+            Reminder Interval
+          </label>
+          <p className="text-xs text-gray-600 mb-2">
+            Minutes to wait before blocking the site again, and breaking your
+            doom scrolling (0 to disable)
+          </p>
+          <input
+            type="number"
+            min="1"
+            max="600"
+            value={settings.reminderInterval}
+            onChange={(e) => updateReminderInterval(parseInt(e.target.value))}
             className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </SectionCard>

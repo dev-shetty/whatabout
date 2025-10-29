@@ -11,25 +11,27 @@ export default function ContentApp({ waitTime, tasks }: ContentAppProps) {
   const [time, setTime] = useState(TIMER_START)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const TIME_TO_DISPLAY = waitTime
+  const api = (globalThis as any).browser || chrome
 
   const handleCloseSite = () => {
-    const api = (globalThis as any).browser || chrome
     api.runtime.sendMessage({ action: "closeTab" })
   }
 
   const handleContinue = () => {
     if (time < TIME_TO_DISPLAY && intervalRef.current) return
     setIsVisible(false)
+    api.runtime.sendMessage({ action: "startTimer" }, (response: any) => {
+      stopTimer()
+      if (response.type === "blockSite" && response.payload) {
+        setIsVisible(true)
+      }
+    })
   }
 
   const startTimer = () => {
     intervalRef.current = setInterval(() => {
       setTime((prev) => prev + 1)
     }, 1 * SECONDS_IN_MS)
-
-    if (time >= TIME_TO_DISPLAY) {
-      clearInterval(intervalRef.current)
-    }
   }
 
   const stopTimer = () => {
